@@ -1,20 +1,29 @@
 <h1 class="heading -large">{{ available.title }}</h1>
 
-<table class="table table-striped table-bordered">
+<table ng-table="available.tableParams" show-filter="true" class="table table-striped table-bordered player-table">
     <tbody>
-        <tr ng-repeat="pitcher in available.pitchers">
-            <td>{{::pitcher.name}}</td>
-            <td>{{::pitcher.team}}</td>
-            <td>{{::pitcher.pos.toString()}}</td>
-            <td>{{::pitcher.status}}</td>
-            <td>{{::pitcher.ip}}</td>
-            <td>{{::pitcher.er}}</td>
-            <td>{{::pitcher.k}}</td>
-            <td>{{::pitcher.cg}}</td>
-            <td>{{::pitcher.so}}</td>
-            <td>{{::pitcher.w}}</td>
-            <td>{{::pitcher.sv}}</td>
-            <td>{{::pitcher.pts}}</td>
+        <tr ng-repeat="player in $data">
+            <td data-title="'Name'" filter="{ 'name': 'text' }">{{::player.name}}</td>
+            <td data-title="'Team'">{{::player.team}}</td>
+            <td data-title="'Pos'">{{::player.pos.toString()}}</td>
+            <td data-title="'Status'">{{::player.status}}</td>
+            <td data-title="'R'"   ng-show="available.hasBatters && !available.hasPitchers">{{::player.r}}</td>
+            <td data-title="'1B'"  ng-show="available.hasBatters && !available.hasPitchers">{{::player.singles}}</td>
+            <td data-title="'2B'"  ng-show="available.hasBatters && !available.hasPitchers">{{::player.doubles}}</td>
+            <td data-title="'3B'"  ng-show="available.hasBatters && !available.hasPitchers">{{::player.triples}}</td>
+            <td data-title="'HR'"  ng-show="available.hasBatters && !available.hasPitchers">{{::player.hr}}</td>
+            <td data-title="'RBI'" ng-show="available.hasBatters && !available.hasPitchers">{{::player.rbi}}</td>
+            <td data-title="'BB'"  ng-show="available.hasBatters && !available.hasPitchers">{{::player.bb}}</td>
+            <td data-title="'SB'"  ng-show="available.hasBatters && !available.hasPitchers">{{::player.sb}}</td>
+            <td data-title="'IP'"  ng-show="available.hasPitchers && !available.hasBatters">{{::player.ip}}</td>
+            <td data-title="'ER'"  ng-show="available.hasPitchers && !available.hasBatters">{{::player.er}}</td>
+            <td data-title="'K'"   ng-show="available.hasPitchers && !available.hasBatters">{{::player.k}}</td>
+            <td data-title="'CG'"  ng-show="available.hasPitchers && !available.hasBatters">{{::player.cg}}</td>
+            <td data-title="'SO'"  ng-show="available.hasPitchers && !available.hasBatters">{{::player.so}}</td>
+            <td data-title="'W'"   ng-show="available.hasPitchers && !available.hasBatters">{{::player.w}}</td>
+            <td data-title="'SV'"  ng-show="available.hasPitchers && !available.hasBatters">{{::player.sv}}</td>
+            <td data-title="'PTS'">{{::player.pts}}</td>
+            <td><button type="button" class="btn btn-danger btn-sm">Remove</button></td>
         </tr>
     </tbody>
 </table>

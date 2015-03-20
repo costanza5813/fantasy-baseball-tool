@@ -65,6 +65,7 @@
     "karma-firefox-launcher": "^0.1.3",
     "karma-jasmine": "^0.1.5",
     "morgan": "^1.2.2",
+    "ng-table": "^0.3.2",
     "pretty-hrtime": "^0.2.2",
     "protractor": "^1.2.0",
     "run-sequence": "^0.3.6",
@@ -84,7 +85,8 @@
   },
   "browser": {
     "angular": "./node_modules/angular/angular.js",
-    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js"
+    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
+    "ng-table": "./node_modules/ng-table/ng-table.js"
   },
   "browserify-shim": {
     "angular": "angular",
