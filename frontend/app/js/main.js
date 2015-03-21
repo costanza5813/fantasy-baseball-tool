@@ -1,7 +1,6 @@
 $ = jQuery = require('jquery');
 
 var angular = require('angular');
-var bootstrap = require('bootstrap');
 
 // angular modules
 require('angular-ui-router');

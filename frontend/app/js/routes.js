@@ -10,7 +10,8 @@ function Routes($stateProvider, $locationProvider, $urlRouterProvider) {
   $stateProvider
   .state('Available', {
     url: '/available',
-    controller: 'AvailableCtrl as available',
+    controller: 'AvailableCtrl',
+    controllerAs: 'available',
     templateUrl: 'available.tpl.html',
     title: 'Available Players'
   });

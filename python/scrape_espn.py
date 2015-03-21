@@ -3,34 +3,36 @@ from bs4 import BeautifulSoup
 
 class Batter:
     def __init__( self, data ):
-        self.name    = data[0]
-        self.team    = data[1]
-        self.pos     = data[2]
-        self.status  = data[3]
-        self.r       = data[4]
-        self.singles = data[5]
-        self.doubles = data[6]
-        self.triples = data[7]
-        self.hr      = data[8]
-        self.rbi     = data[9]
-        self.bb      = data[10]
-        self.sb      = data[11]
-        self.pts     = data[12]
+        self.pid     = data[0]
+        self.name    = data[1]
+        self.team    = data[2]
+        self.pos     = data[3]
+        self.status  = data[4]
+        self.r       = data[5]
+        self.singles = data[6]
+        self.doubles = data[7]
+        self.triples = data[8]
+        self.hr      = data[9]
+        self.rbi     = data[10]
+        self.bb      = data[11]
+        self.sb      = data[12]
+        self.pts     = data[13]
 
 class Pitcher:
     def __init__( self, data ):
-        self.name   = data[0]
-        self.team   = data[1]
-        self.pos    = data[2]
-        self.status = data[3]
-        self.ip     = data[4]
-        self.er     = data[5]
-        self.k      = data[6]
-        self.cg     = data[7]
-        self.so     = data[8]
-        self.w      = data[9]
-        self.sv     = data[10]
-        self.pts    = data[11]
+        self.pid    = data[0]
+        self.name   = data[1]
+        self.team   = data[2]
+        self.pos    = data[3]
+        self.status = data[4]
+        self.ip     = data[5]
+        self.er     = data[6]
+        self.k      = data[7]
+        self.cg     = data[8]
+        self.so     = data[9]
+        self.w      = data[10]
+        self.sv     = data[11]
+        self.pts    = data[12]
 
 def isPos( pos ):
     allPos = ['C', '1B', '2B', '3B', 'SS', 'OF', 'RP', 'SP', 'DH']
@@ -45,11 +47,11 @@ def handleNameTeamPos( sName, sNameTeamPos ):
     p = re.compile('[\w]+')
     m = p.findall(sTeamPos)
     sReturn.append(str(m[0]).upper())
-    pos = []
+    pos = ''
     status = ''
     for i in range(1,len(m)):
         if isPos(str(m[i])):
-            pos.append(str(m[i]))
+            pos += str(m[i]) + ' ';
         else:
             status = str(m[i])
 
@@ -60,7 +62,7 @@ def handleNameTeamPos( sName, sNameTeamPos ):
 def main():
     batters = []
     pitchers = []
-    cj = cookielib.MozillaCookieJar('/home/kevin/workspace/fb-draft/python/cookies.txt')
+    cj = cookielib.MozillaCookieJar('/home/kevin/workspace/fantasy-baseball-tool/python/cookies.txt')
     cj.load()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
@@ -70,6 +72,7 @@ def main():
         for row in soup.find_all('table')[1].find_all('tr'):
             tds = row.find_all('td')
             pData = []
+            pData.append(row.get('id'))
             for i in range(len(tds)):
                 if i == 0 and tds[i].string == 'RNK':
                     break	
@@ -83,7 +86,7 @@ def main():
                     else:
                         pData.append(int(tds[i].string))
 
-            if len(pData) == 13:
+            if len(pData) == 14:
                 batters.append(Batter(pData))
 
     f = open('batters.json', 'w')
@@ -96,6 +99,7 @@ def main():
         for row in soup.find_all('table')[1].find_all('tr'):
             tds = row.find_all('td')
             pData = []
+            pData.append(row.get('id'))
             for i in range(len(tds)):
                 if i == 0 and tds[i].string == 'RNK':
                     break	
@@ -114,7 +118,7 @@ def main():
                     else:
                         pData.append(int(tds[i].string))
 
-            if len(pData) == 12:
+            if len(pData) == 13:
                 pitchers.append(Pitcher(pData))
 
     f = open('pitchers.json', 'w')
