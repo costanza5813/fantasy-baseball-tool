@@ -60,14 +60,20 @@ def handleNameTeamPos( sName, sNameTeamPos ):
     return sReturn
 
 def main():
+    # fill in global values
+    cookiePath = 'C:\Users\kevin\Workspace\www\\fantasy-baseball-tool\python\cookies.txt'
+    numBatters = 682
+    numPitchers = 681
+    baseUrl = 'http://games.espn.go.com/flb/tools/projections?leagueId=71301'
+
     batters = []
     pitchers = []
-    cj = cookielib.MozillaCookieJar('/home/kevin/workspace/fantasy-baseball-tool/python/cookies.txt')
+    cj = cookielib.MozillaCookieJar(cookiePath)
     cj.load()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
-    for startIdx in range(0,641,40):
-        soup = BeautifulSoup(opener.open('http://games.espn.go.com/flb/tools/projections?leagueId=71301&slotCategoryGroup=1&startIndex=' + str(startIdx)).read())
+    for startIdx in range(0,numBatters,40):
+        soup = BeautifulSoup(opener.open(baseUrl + '&slotCategoryGroup=1&startIndex=' + str(startIdx)).read(), "html.parser")
 
         for row in soup.find_all('table')[1].find_all('tr'):
             tds = row.find_all('td')
@@ -75,7 +81,7 @@ def main():
             pData.append(row.get('id'))
             for i in range(len(tds)):
                 if i == 0 and tds[i].string == 'RNK':
-                    break	
+                    break
                 elif i == 1:
                     pData.extend(handleNameTeamPos(tds[i].find('a').string, tds[i].get_text()))
                 elif i == 2 or i == 3:
@@ -93,8 +99,8 @@ def main():
     f.write(jsonpickle.encode(batters, unpicklable=False))
     f.close()
 
-    for startIdx in range(0,681,40):
-        soup = BeautifulSoup(opener.open('http://games.espn.go.com/flb/tools/projections?leagueId=71301&slotCategoryGroup=2&startIndex=' + str(startIdx)).read())
+    for startIdx in range(0,numPitchers,40):
+        soup = BeautifulSoup(opener.open(baseUrl + '&slotCategoryGroup=2&startIndex=' + str(startIdx)).read(), "html.parser")
 
         for row in soup.find_all('table')[1].find_all('tr'):
             tds = row.find_all('td')
@@ -102,7 +108,7 @@ def main():
             pData.append(row.get('id'))
             for i in range(len(tds)):
                 if i == 0 and tds[i].string == 'RNK':
-                    break	
+                    break
                 elif i == 1:
                     pData.extend(handleNameTeamPos(tds[i].find('a').string, tds[i].get_text()))
                 elif i == 2 or i == 3:
